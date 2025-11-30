@@ -1,1 +1,1 @@
-# MalloqTheMighty
+# Malloq, The Mighty
