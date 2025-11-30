@@ -190,6 +190,8 @@ int main(){
         move(0,0);
 
         // TODO: add func memHit() / beenHere()
+
+        // move to function? : GoToEdge ... followEdge ... followMyTrace
         while (NO_WALL_RIGHT){
             letsWalk(RIGHT);
         } 
