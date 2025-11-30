@@ -1,0 +1,10 @@
+{
+    "makefile.makePath": "",
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/Users/bg/code/c/robot",
+            "binaryPath": "/Users/bg/code/c/robot/main.exe",
+            "binaryArgs": []
+        }
+    ]
+}
