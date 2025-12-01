@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <math.h>
 
 #define clrscr() printf("\e[1;1H\e[2J")
 #define COLOR_RESET   "\033[0m"
@@ -60,6 +61,7 @@
     typedef struct
     {
         enum Status status;
+        enum Dir myDirection;
         int battery;
         int moves;
         Pos pos;
@@ -140,10 +142,13 @@
 
     // låt oss spatsera..
     void letsWalk(enum Dir dir){
+
+        // spara riktningen
+        malloq.myDirection = dir;
+
         rememberThisPos();
         showMe(malloq);
         showMyTrace(malloq);
-        
 
         switch (dir) {
         case UP:
@@ -158,6 +163,37 @@
 
         case RIGHT:
                 malloq.pos.X++;
+            break;
+        }
+    }
+
+
+    void findEdge(){
+        while (NO_WALL_RIGHT){
+            letsWalk(RIGHT);
+        }
+        
+    }
+
+    int jobLeftPerc(){
+        int gridPoints = (GRIDSIZE_X-2) * (GRIDSIZE_Y-2);
+        return ceil((gridPoints - malloq.moves / gridPoints) * 100);
+    }
+
+    void turnMeRight(){
+        switch (malloq.myDirection)
+        {
+        case UP:
+            //to RIGHT
+            break;
+        case DOWN:
+            //to LEFT
+            break;
+        case LEFT:
+            //to UP
+            break;
+        case RIGHT:
+            //to DOWN
             break;
         }
     }
@@ -184,14 +220,20 @@ int main(){
     bool job2do = true;
 
     while(job2do){
-
-        // TODO: add func checkJobStatus()
         showMe(malloq);
         move(0,0);
 
-        // TODO: add func memHit() / beenHere()
+        findEdge();
+        //letsWalk(keepWallOnRight());
+                // keepWallOnRight(); --> BOOL, gå åt rätt håll... retunerar riktning. while det är vägg rakt fram, retunera "vänster" : annars "höger". slimma vägg (kolla att vägg är till höger..)
+                // turnMeRight(); //- create func: vad är höger? -> beroende på min tidigare/senaste och nuvarande pos. -> call HugTheEdge
+                // hugTheEdge(); - slimma yttekanten
 
-        // move to function? : GoToEdge ... followEdge ... followMyTrace
+
+
+        
+
+        // && wallBesideMe() - check, if not - call-> turnMeRight..
         while (NO_WALL_RIGHT){
             letsWalk(RIGHT);
         } 
@@ -204,8 +246,24 @@ int main(){
         while (NO_WALL_DOWN){
             letsWalk(DOWN);  
         }
+
+        // TODO: add func 
+        //bennHere();
+
+        // TODO: battery check..
+
+        if (!jobLeftPerc()){
+            job2do = false;
+        }
+
+    // walkStyles:
+    //... hugMyTrace(); ska slimma senaste spår runt om.. 
+    //... snakeSlither(); ska gå som en orm spår
+
     }
 
+    // park malloq..
+    printf("time to go home and sleep..zzz");
         
 return 0;
 }
