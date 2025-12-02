@@ -4,15 +4,20 @@
 #include <stdlib.h>
 #include <math.h>
 
+#define GRIDSIZE_X 40
+#define GRIDSIZE_Y 20
+#define ROBOT_SPEED 100000
+#define ROBOT_HOME_X 9
+#define ROBOT_HOME_Y 9
+
 #define clrscr() printf("\e[1;1H\e[2J")
 #define COLOR_RESET   "\033[0m"
 #define COLOR_GREEN   "\033[32m"
 #define COLOR_ORANGE  "\033[38;5;208m"
-#define COLOR_BLUE "\033[38;5;117m"
-#define COLOR_CYAN "\033[38;5;51m"
 #define COLOR_YELLOW "\033[38;5;226m"
-#define COLOR_L_YELLOW "\033[38;5;228m"
 #define COLOR_RED "\033[38;5;196m"
+
+#define WALL '#'
 
 #define NO_WALL_LEFT malloq.pos.X > (GRIDSIZE_X-GRIDSIZE_X)+2
 #define NO_WALL_RIGHT malloq.pos.X < GRIDSIZE_X-1
@@ -23,20 +28,6 @@
 #define WALL_RIGHT malloq.pos.X == GRIDSIZE_X-1
 #define WALL_UP malloq.pos.Y == (GRIDSIZE_Y-GRIDSIZE_Y)+2
 #define WALL_DOWN malloq.pos.Y == GRIDSIZE_Y-1
-
-#define WALL_IN_FRONT 0
-#define NO_WALL_TO_RIGHT 0
-#define TURN_LEFT 0
-#define TURN_RIGHT 0
-
-
-#define GRIDSIZE_X 40
-#define GRIDSIZE_Y 20
-#define ROBOT_SPEED 100000
-#define ROBOT_HOME_X 9
-#define ROBOT_HOME_Y 9
-
-#define WALL '#'
 
     enum Dir {
     UP,
@@ -162,8 +153,8 @@
     // låt oss spatsera..
     void letsWalk(enum Dir dir){
 
-        // spara riktningen.. rätt plats?
-        malloq.myCurrentDir = dir;
+        // spara riktningen.. överflödig här?
+        //malloq.myCurrentDir = dir;
 
         rememberThisPos();
         showMe(malloq);
@@ -296,7 +287,6 @@ int main(){
         // First lap -> run until "hit" / overlap
         keepWallOnRight(); 
 
-
         // workStyles:  --> After first lap.
         //... a) hugMyTrace(); ska slimma senaste spår runt om.. 
         //... b) snakeSlither(); ska gå som en "orm" / fram-tillbax etc..
@@ -311,9 +301,6 @@ int main(){
         if (!jobLeftPerc()){
             job2do = false;
         }
-
-        
-
     }
 
     // park malloq..
