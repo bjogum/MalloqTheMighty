@@ -162,8 +162,6 @@
     // låt oss spatsera..
     void letsWalk(enum Dir dir){
 
-        printf("-->DIR:: %d", dir);
-
         // spara riktningen.. rätt plats?
         malloq.myCurrentDir = dir;
 
@@ -180,12 +178,10 @@
             break;
         case LEFT:
                 malloq.pos.X--;
-                printf("goLeft");
             break;
 
         case RIGHT:
                 malloq.pos.X++;
-                printf("goRight");
             break;
         }
     }
