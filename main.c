@@ -246,12 +246,16 @@
         return false;
     }
 
+    bool beenHere(){
+        return 0;
+    }
+
     void keepWallOnRight(){
-        while (isWallInFront()){
+        while (isWallInFront()){ // maybe: isWallInFront || isMyTraceInFront
             turnMeLeft(); 
         } 
 
-        if (noWallToRight()){
+        if (noWallToRight()){ // maybe: noWallToRight || noTraceToRight
             turnMeRight(); 
         }
     }
@@ -284,8 +288,11 @@ int main(){
 
     while(job2do){
         
-        // First lap -> run until "hit" / overlap
-        keepWallOnRight(); 
+        if (!beenHere()){
+            keepWallOnRight(); // First lap -> run until "hit" / overlap - just first lap or extended....? edgeLap = true ?
+        } else {
+            // have been here ... overlap until next turn. -> then, hugMyTrace
+        }
 
         // workStyles:  --> After first lap.
         //... a) hugMyTrace(); ska slimma senaste spår runt om.. 
