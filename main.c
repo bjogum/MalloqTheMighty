@@ -19,9 +19,23 @@
 #define NO_WALL_UP malloq.pos.Y > (GRIDSIZE_Y-GRIDSIZE_Y)+2
 #define NO_WALL_DOWN malloq.pos.Y < GRIDSIZE_Y-1
 
+#define WALL_LEFT malloq.pos.X == (GRIDSIZE_X-GRIDSIZE_X)+2
+#define WALL_RIGHT malloq.pos.X == GRIDSIZE_X-1
+#define WALL_UP malloq.pos.Y == (GRIDSIZE_Y-GRIDSIZE_Y)+2
+#define WALL_DOWN malloq.pos.Y == GRIDSIZE_Y-1
+
+#define WALL_IN_FRONT 0
+#define NO_WALL_TO_RIGHT 0
+#define TURN_LEFT 0
+#define TURN_RIGHT 0
+
+
 #define GRIDSIZE_X 40
 #define GRIDSIZE_Y 20
 #define ROBOT_SPEED 100000
+#define ROBOT_HOME_X 9
+#define ROBOT_HOME_Y 9
+
 #define WALL '#'
 
     enum Dir {
@@ -61,9 +75,14 @@
     typedef struct
     {
         enum Status status;
-        enum Dir myDirection;
+
+        //behövs denna ens?
+        enum Dir myLastDir;
+
+        enum Dir myCurrentDir;
         int battery;
         int moves;
+        Pos myHome;
         Pos pos;
         Pos *historicPos;
         bool finish;
@@ -143,8 +162,10 @@
     // låt oss spatsera..
     void letsWalk(enum Dir dir){
 
-        // spara riktningen
-        malloq.myDirection = dir;
+        printf("-->DIR:: %d", dir);
+
+        // spara riktningen.. rätt plats?
+        malloq.myCurrentDir = dir;
 
         rememberThisPos();
         showMe(malloq);
@@ -159,15 +180,17 @@
             break;
         case LEFT:
                 malloq.pos.X--;
+                printf("goLeft");
             break;
 
         case RIGHT:
                 malloq.pos.X++;
+                printf("goRight");
             break;
         }
     }
 
-
+    // go to right edge.
     void findEdge(){
         while (NO_WALL_RIGHT){
             letsWalk(RIGHT);
@@ -181,20 +204,68 @@
     }
 
     void turnMeRight(){
-        switch (malloq.myDirection)
+        switch (malloq.myCurrentDir)
         {
         case UP:
-            //to RIGHT
+            malloq.myCurrentDir = RIGHT;
             break;
         case DOWN:
-            //to LEFT
+            malloq.myCurrentDir = LEFT;
             break;
         case LEFT:
-            //to UP
+            malloq.myCurrentDir = UP;
             break;
         case RIGHT:
-            //to DOWN
+            malloq.myCurrentDir = DOWN;
             break;
+        }
+    }
+
+        void turnMeLeft(){
+        switch (malloq.myCurrentDir)
+        {
+        case UP:
+            malloq.myCurrentDir = LEFT;
+            break;
+        case DOWN:
+            malloq.myCurrentDir = RIGHT;
+            break;
+        case LEFT:
+            malloq.myCurrentDir = DOWN;
+            break;
+        case RIGHT:
+            malloq.myCurrentDir = UP;
+            break;
+        }
+    }
+
+    bool isWallInFront(){ 
+        if ((malloq.myCurrentDir == RIGHT && WALL_RIGHT) ||
+            (malloq.myCurrentDir == LEFT  && WALL_LEFT)  ||
+            (malloq.myCurrentDir == UP    && WALL_UP)    ||
+            (malloq.myCurrentDir == DOWN  && WALL_DOWN)){
+        return true;
+        }
+        return false;
+    }
+
+    bool noWallToRight(){
+        if ((malloq.myCurrentDir == RIGHT && NO_WALL_DOWN)  ||
+            (malloq.myCurrentDir == LEFT  && NO_WALL_UP)    ||
+            (malloq.myCurrentDir == UP    && NO_WALL_RIGHT) ||
+            (malloq.myCurrentDir == DOWN  && NO_WALL_LEFT)){
+        return true;
+        }
+        return false;
+    }
+
+    void keepWallOnRight(){
+        while (isWallInFront()){
+            turnMeLeft(); 
+        } 
+
+        if (noWallToRight()){
+            turnMeRight(); 
         }
     }
 
@@ -204,49 +275,38 @@ int main(){
     // init values
     grid.maxX = GRIDSIZE_X;
     grid.maxY = GRIDSIZE_Y;
-    
-    pos.X = 0;
-    pos.Y = 0;
+
+    malloq.myHome.X = ROBOT_HOME_X;
+    malloq.myHome.Y = ROBOT_HOME_Y;
 
     malloq.moves = 0;
-    malloq.pos.X = 9;
-    malloq.pos.Y = 9;
+    malloq.pos.X = malloq.myHome.X;
+    malloq.pos.Y = malloq.myHome.Y;
     malloq.finish = false;
 
     clrscr();
     hideCursor();
     drawGrid();
-
     bool job2do = true;
+    showMe(malloq);
+    move(0,0);
+
+
+    // go to "start position"
+    findEdge();
 
     while(job2do){
-        showMe(malloq);
-        move(0,0);
-
-        findEdge();
-        //letsWalk(keepWallOnRight());
-                // keepWallOnRight(); --> BOOL, gå åt rätt håll... retunerar riktning. while det är vägg rakt fram, retunera "vänster" : annars "höger". slimma vägg (kolla att vägg är till höger..)
-                // turnMeRight(); //- create func: vad är höger? -> beroende på min tidigare/senaste och nuvarande pos. -> call HugTheEdge
-                // hugTheEdge(); - slimma yttekanten
-
-
-
         
+        // First lap -> run until "hit" / overlap
+        keepWallOnRight(); 
 
-        // && wallBesideMe() - check, if not - call-> turnMeRight..
-        while (NO_WALL_RIGHT){
-            letsWalk(RIGHT);
-        } 
-        while (NO_WALL_UP){
-            letsWalk(UP);
-        } 
-        while (NO_WALL_LEFT){
-            letsWalk(LEFT);
-        } 
-        while (NO_WALL_DOWN){
-            letsWalk(DOWN);  
-        }
 
+        // workStyles:  --> After first lap.
+        //... a) hugMyTrace(); ska slimma senaste spår runt om.. 
+        //... b) snakeSlither(); ska gå som en "orm" / fram-tillbax etc..
+
+        letsWalk(malloq.myCurrentDir);
+        
         // TODO: add func 
         //bennHere();
 
@@ -256,9 +316,7 @@ int main(){
             job2do = false;
         }
 
-    // walkStyles:
-    //... hugMyTrace(); ska slimma senaste spår runt om.. 
-    //... snakeSlither(); ska gå som en orm spår
+        
 
     }
 
