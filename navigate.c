@@ -22,6 +22,7 @@ void showMyTrace(Robot *malloq){
     printf(COLOR_GREEN"o"COLOR_RESET);
 }
 
+// sväng till höger
 void turnMeRight(Robot *malloq){
     switch (malloq->myCurrentDir)
     {
@@ -40,6 +41,7 @@ void turnMeRight(Robot *malloq){
     }
 }
 
+// sväng till vänster
 void turnMeLeft(Robot *malloq){
     switch (malloq->myCurrentDir)
     {
@@ -58,6 +60,7 @@ void turnMeLeft(Robot *malloq){
     }
 }
 
+//  kontrollera om det är vägg framför
 bool isWallInFront(Robot *malloq){ 
     if ((malloq->myCurrentDir == RIGHT && WALL_RIGHT) ||
         (malloq->myCurrentDir == LEFT  && WALL_LEFT)  ||
@@ -68,6 +71,7 @@ bool isWallInFront(Robot *malloq){
     return false;
 }
 
+// kontrollera om vägg till höger saknas
 bool noWallToRight(Robot *malloq){
     if ((malloq->myCurrentDir == RIGHT && NO_WALL_DOWN)  ||
         (malloq->myCurrentDir == LEFT  && NO_WALL_UP)    ||
@@ -78,20 +82,22 @@ bool noWallToRight(Robot *malloq){
     return false;
 }
 
+// ...
 bool beenHere(){
     return 0;
 }
 
+// Håller roboten utmed högerväggen. Moturs.
 void keepWallOnRight(Robot *malloq){
-    while (isWallInFront(malloq)){ // maybe: isWallInFront || isMyTraceInFront
+    while (isWallInFront(malloq)){ 
         turnMeLeft(malloq); 
     } 
-    if (noWallToRight(malloq)){ // maybe: noWallToRight || noTraceToRight
+    if (noWallToRight(malloq)){ 
         turnMeRight(malloq); 
     }
 }
 
-void rememberThisPos(Robot *malloq){ // TODO: addera bara om positionen är "ny" / unik.
+void rememberThisPos(Robot *malloq){ 
     // Allocate memory for the position-data
     if (!malloq->moves){
         malloq->historicPos = (Pos*)malloc(sizeof(malloq->historicPos));
