@@ -115,8 +115,7 @@ void rememberThisPos(Robot *malloq){
 
 // låt oss spatsera..
 void letsWalk(Robot *malloq){
-    // spara riktningen.. överflödig här?
-    //malloq.myCurrentDir = dir;
+    
     rememberThisPos(malloq);
     showMe(malloq);
     showMyTrace(malloq);
