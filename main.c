@@ -24,6 +24,7 @@ int main(){
         if (!beenHere()){
             keepWallOnRight(&malloq); // First lap -> run until "hit" / overlap - just first lap or extended....? edgeLap = true ?
         } else {
+            // firstOverlap
             // have been here ... overlap until next turn. -> then, hugMyTrace
         }
 

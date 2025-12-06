@@ -97,28 +97,47 @@ void keepWallOnRight(Robot *malloq){
     }
 }
 
-void rememberThisPos(Robot *malloq){ 
-    // Allocate memory for the position-data
-    if (!malloq->moves){
-        malloq->historicPos = (Pos*)malloc(sizeof(malloq->historicPos));
-    } else {
-        malloq->historicPos = (Pos*)realloc(malloq->historicPos,sizeof(malloq->historicPos));
+void rememberThisPos(Robot *malloq){  
+    bool newUniqePos = true;
+
+    // Add ONLY uniqe data
+    if (malloq->moves > 0){
+        for (int i = 0; i < sizeof(malloq->historicPos); i++){
+            if (malloq->pos.X == malloq->historicPos[i].X &&
+                malloq->pos.Y == malloq->historicPos[i].Y){
+                newUniqePos = false;
+                break;
+            }
+        }
     }
-    if (malloq->historicPos == NULL){
-        printf("Error during memory allocation");
-        return;
+
+    if (newUniqePos){
+        // Allocate memory for the position-data
+        if (!malloq->moves){
+            malloq->historicPos = (Pos*)malloc(sizeof(malloq->historicPos));
+        } else {
+            malloq->historicPos = (Pos*)realloc(malloq->historicPos,sizeof(malloq->historicPos));
+        }
+        if (malloq->historicPos == NULL){
+            printf("Error during memory allocation");
+            return;
+        }
+        // save the position and count moves.
+        malloq->historicPos->X = malloq->pos.X;
+        malloq->historicPos->Y = malloq->pos.Y;
     }
-    malloq->moves++;
-    malloq->historicPos->X = malloq->pos.X;
-    malloq->historicPos->Y = malloq->pos.Y;
 }
 
-// låt oss spatsera..
+// move robot to new pos
 void letsWalk(Robot *malloq){
-    
+
     rememberThisPos(malloq);
     showMe(malloq);
     showMyTrace(malloq);
+
+    // count robot total moves
+    malloq->moves++;
+
     switch (malloq->myCurrentDir) {
     case UP:
             malloq->pos.Y--;
