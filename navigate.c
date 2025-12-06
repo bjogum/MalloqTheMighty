@@ -101,7 +101,7 @@ void rememberThisPos(Robot *malloq){
     bool newUniqePos = true;
 
     // Add ONLY uniqe data
-    if (malloq->moves > 0){
+    if (malloq->moves){
         for (int i = 0; i < sizeof(malloq->historicPos); i++){
             if (malloq->pos.X == malloq->historicPos[i].X &&
                 malloq->pos.Y == malloq->historicPos[i].Y){
