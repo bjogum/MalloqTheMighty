@@ -66,7 +66,7 @@ bool isWallInFront(Robot *malloq);
 bool noWallToRight(Robot *malloq);
 bool beenHere(Robot *malloq);
 void keepWallOnRight(Robot *malloq);
-void rememberThisPos(Robot *malloq);
+void rememberThisPos(Robot **malloq);
 void letsWalk(Robot *malloq);
 void findEdge(Robot *malloq);
 void move(int x, int y);
