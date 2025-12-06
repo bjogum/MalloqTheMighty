@@ -89,6 +89,7 @@ bool beenHere(Robot *malloq){
             if (malloq->pos.X == malloq->historicPos[i].X &&
                 malloq->pos.Y == malloq->historicPos[i].Y){
                     malloq->overlapCounter++;
+                    break;
             }
         }       
     }
@@ -113,7 +114,6 @@ void keepWallOnRight(Robot *malloq){
 
 void rememberThisPos(Robot *malloq){  
     bool newUniqePos = true;
-
     // Add ONLY uniqe data
     if (malloq->moves){
         for (int i = 0; i < sizeof(malloq->historicPos); i++){
@@ -136,6 +136,10 @@ void rememberThisPos(Robot *malloq){
             printf("Error during memory allocation");
             return;
         }
+
+        // får tillbaka samma adress trots realloc.....
+        printf("--> %p", malloq->historicPos);
+
         // save the position and count moves.
         malloq->historicPos->X = malloq->pos.X;
         malloq->historicPos->Y = malloq->pos.Y;
