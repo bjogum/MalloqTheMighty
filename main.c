@@ -21,10 +21,10 @@ int main(){
     bool job2do = true;
     while(job2do){
         
-        if (!beenHere()){
+        if (!beenHere(&malloq)){
             keepWallOnRight(&malloq); // First lap -> run until "hit" / overlap - just first lap or extended....? edgeLap = true ?
         } else {
-            // firstOverlap
+            printf("..overlap..");// firstOverlap
             // have been here ... overlap until next turn. -> then, hugMyTrace
         }
 

@@ -49,14 +49,13 @@ typedef struct
 typedef struct
 {
     enum Status status;
-    //behövs denna ens?
-    enum Dir myLastDir;
     enum Dir myCurrentDir;
     int battery;
     int moves;
     Pos myHome;
     Pos pos;
     Pos *historicPos;
+    int overlapCounter;
     bool finish;
 }Robot;
 
@@ -65,7 +64,7 @@ void turnMeRight(Robot *malloq);
 void turnMeLeft(Robot *malloq);
 bool isWallInFront(Robot *malloq);
 bool noWallToRight(Robot *malloq);
-bool beenHere();
+bool beenHere(Robot *malloq);
 void keepWallOnRight(Robot *malloq);
 void rememberThisPos(Robot *malloq);
 void letsWalk(Robot *malloq);

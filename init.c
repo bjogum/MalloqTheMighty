@@ -47,6 +47,7 @@ void setInitValues(Robot *malloq){
     malloq->pos.Y = malloq->myHome.Y;
     malloq->finish = false;
 
+    malloq->overlapCounter = 0;
     clrscr();
     hideCursor();
     drawGrid(&grid);

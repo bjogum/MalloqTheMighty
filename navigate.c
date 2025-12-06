@@ -82,9 +82,23 @@ bool noWallToRight(Robot *malloq){
     return false;
 }
 
-// ...
-bool beenHere(){
-    return 0;
+// if overlap more than 2 steps..
+bool beenHere(Robot *malloq){
+    if (malloq->moves){
+        for (int i = 0; i < sizeof(malloq->historicPos); i++){
+            if (malloq->pos.X == malloq->historicPos[i].X &&
+                malloq->pos.Y == malloq->historicPos[i].Y){
+                    malloq->overlapCounter++;
+            }
+        }       
+    }
+
+    if (malloq->overlapCounter > 2){
+        malloq->overlapCounter = 0;
+        return true;
+        
+    }
+    return false;
 }
 
 // Håller roboten utmed högerväggen. Moturs.
