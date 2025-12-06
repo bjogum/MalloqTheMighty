@@ -5,7 +5,7 @@
 #define GRIDSIZE_X 40
 #define GRIDSIZE_Y 20
 
-#define ROBOT_SPEED 5000000
+#define ROBOT_SPEED 300000 // Fast=300 000
 #define ROBOT_HOME_X 9
 #define ROBOT_HOME_Y 9
 
