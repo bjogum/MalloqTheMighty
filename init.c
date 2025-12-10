@@ -46,7 +46,7 @@ void setInitValues(Robot *malloq){
     malloq->pos.X = malloq->myHome.X;
     malloq->pos.Y = malloq->myHome.Y;
     malloq->finish = false;
-
+    malloq->uniqeMovesCounter = 0;
     malloq->overlapCounter = 0;
     clrscr();
     hideCursor();

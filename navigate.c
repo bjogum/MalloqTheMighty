@@ -114,10 +114,10 @@ void keepWallOnRight(Robot *malloq){
 
 void rememberThisPos(Robot **malloq){  
     bool newUniqePos = true;
-    
+
     // Add ONLY uniqe data
     if ((*malloq)->moves){
-        for (int i = 0; i < sizeof((*malloq)->historicPos); i++){
+        for (int i = 0; i < (*malloq)->uniqeMovesCounter; i++){
             if ((*malloq)->pos.X == (*malloq)->historicPos[i].X &&
                 (*malloq)->pos.Y == (*malloq)->historicPos[i].Y){
                 newUniqePos = false;
@@ -129,21 +129,18 @@ void rememberThisPos(Robot **malloq){
     if (newUniqePos){
         // Allocate memory for the position-data
         if (!(*malloq)->moves){
-            (*malloq)->historicPos = (Pos*)malloc(sizeof((*malloq)->historicPos));
+            (*malloq)->historicPos = (Pos*)malloc(sizeof(Pos) * 1);
         } else {
-            (*malloq)->historicPos = (Pos*)realloc((*malloq)->historicPos,sizeof((*malloq)->historicPos));
+            (*malloq)->historicPos = (Pos*)realloc((*malloq)->historicPos, sizeof(Pos) * (*malloq)->uniqeMovesCounter+1);
         }
         if ((*malloq)->historicPos == NULL){
             printf("Error during memory allocation");
             return;
         }
 
-        // får tillbaka samma adress trots realloc.....
-        printf("--> %p", (*malloq)->historicPos);
-
-        // save the position and count moves.
-        (*malloq)->historicPos->X = (*malloq)->pos.X;
-        (*malloq)->historicPos->Y = (*malloq)->pos.Y;
+        (*malloq)->historicPos[(*malloq)->uniqeMovesCounter].X = (*malloq)->pos.X;
+        (*malloq)->historicPos[(*malloq)->uniqeMovesCounter].Y = (*malloq)->pos.Y;
+        (*malloq)->uniqeMovesCounter++;
     }
 }
 
