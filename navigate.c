@@ -138,6 +138,7 @@ void rememberThisPos(Robot **malloq){
             return;
         }
 
+        // add the new position, at the new index. Add +1 to uniqeMovesCounter.
         (*malloq)->historicPos[(*malloq)->uniqeMovesCounter].X = (*malloq)->pos.X;
         (*malloq)->historicPos[(*malloq)->uniqeMovesCounter].Y = (*malloq)->pos.Y;
         (*malloq)->uniqeMovesCounter++;
