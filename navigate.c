@@ -85,7 +85,7 @@ bool noWallToRight(Robot *malloq){
 // if overlap more than 2 steps..
 bool beenHere(Robot *malloq){
     if (malloq->moves){
-        for (int i = 0; i < sizeof(malloq->historicPos); i++){
+        for (int i = 0; i < (*malloq).uniqeMovesCounter; i++){
             if (malloq->pos.X == malloq->historicPos[i].X &&
                 malloq->pos.Y == malloq->historicPos[i].Y){
                     malloq->overlapCounter++;

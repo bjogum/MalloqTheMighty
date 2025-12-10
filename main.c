@@ -24,10 +24,9 @@ int main(){
         if (!beenHere(&malloq)){
             keepWallOnRight(&malloq); // First lap -> run until "hit" / overlap - just first lap or extended....? edgeLap = true ?
         } else {
-            printf("..overlap..");// firstOverlap
+            printf("<<< overlap >>>");// firstOverlap
             // have been here ... overlap until next turn. -> then, hugMyTrace
         }
-
         // workStyles:  --> After first lap.
         //... a) hugMyTrace(); ska slimma senaste spår runt om.. 
         //... b) snakeSlither(); ska gå som en "orm" / fram-tillbax etc..
