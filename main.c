@@ -14,30 +14,27 @@ int main(){
     //skapar robot
     Robot malloq;
     setInitValues(&malloq);
-
+    
     // go to "start position"
     findEdge(&malloq);
 
+    bool initLap = true;
     bool job2do = true;
     while(job2do){
-        
-        if (!beenHere(&malloq)){
-            keepWallOnRight(&malloq); // First lap -> run until "hit" / overlap - just first lap or extended....? edgeLap = true ?
-        } else {
-            printf("<<< overlap >>>");// firstOverlap
-            // have been here ... overlap until next turn. -> then, hugMyTrace
-        }
-        // workStyles:  --> After first lap.
-        //... a) hugMyTrace(); ska slimma senaste spår runt om.. 
-        //... b) snakeSlither(); ska gå som en "orm" / fram-tillbax etc..
 
+        if (initLap && beenHere(&malloq)){
+            initLap = false;
+        }
+    
+        if (!initLap){
+            avoidOverlap(&malloq);
+            myRoutePattern(&malloq, CIRCLE);
+        }
+    
+        keepWallOnRight(&malloq);
         letsWalk(&malloq);
         
-        // TODO: add func 
-        //bennHere();
-
         // TODO: battery check..
-
         if (!jobLeftPerc(&malloq)){
             job2do = false;
         }

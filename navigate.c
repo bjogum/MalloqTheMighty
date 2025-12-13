@@ -88,17 +88,17 @@ bool beenHere(Robot *malloq){
         for (int i = 0; i < (*malloq).uniqeMovesCounter; i++){
             if (malloq->pos.X == malloq->historicPos[i].X &&
                 malloq->pos.Y == malloq->historicPos[i].Y){
-                    malloq->overlapCounter++;
-                    break;
+                    //malloq->overlapCounter++;
+                    return true;
             }
         }       
     }
 
-    if (malloq->overlapCounter > 2){
-        malloq->overlapCounter = 0;
-        return true;
+    //if (malloq->overlapCounter > 2){
+    //    malloq->overlapCounter = 0;
+    //    return true;
         
-    }
+    //}
     return false;
 }
 
@@ -176,5 +176,33 @@ void findEdge(Robot *malloq){
     while (NO_WALL_RIGHT){
         malloq->myCurrentDir = RIGHT;
         letsWalk(malloq);
+    }
+}
+
+
+void avoidOverlap(Robot *malloq){
+    if (beenHere(malloq)){
+        printf("<<< !overlap! >>>");
+    }
+}
+
+void keepMyTrackOnRight(Robot *malloq){
+
+}
+
+
+void myRoutePattern(Robot *malloq, enum WorkStyle style){
+    switch (style)
+    {
+    case CIRCLE:
+        keepMyTrackOnRight(malloq);
+            
+        break;
+    case SNAKE:
+        //snakeSlither(malloq); // not finish
+    break;
+    
+    default:
+        break;
     }
 }

@@ -5,7 +5,7 @@
 #define GRIDSIZE_X 40
 #define GRIDSIZE_Y 20
 
-#define ROBOT_SPEED 300000 // Fast=300 000
+#define ROBOT_SPEED 200000 // Fast=300 000
 #define ROBOT_HOME_X 9
 #define ROBOT_HOME_Y 9
 
@@ -23,6 +23,11 @@
 #define WALL_RIGHT malloq->pos.X == GRIDSIZE_X-1
 #define WALL_UP malloq->pos.Y == (GRIDSIZE_Y-GRIDSIZE_Y)+2
 #define WALL_DOWN malloq->pos.Y == GRIDSIZE_Y-1
+
+enum WorkStyle {
+CIRCLE,
+SNAKE
+};
 
 // enum för Robot status
 enum Status {
@@ -73,6 +78,8 @@ void findEdge(Robot *malloq);
 void move(int x, int y);
 void showMe(Robot *malloq);
 void showMyTrace(Robot *malloq);
-
+void avoidOverlap(Robot *malloq);
+void keepMyTrackOnRight(Robot *malloq);
+void myRoutePattern(Robot *malloq, enum WorkStyle style);
 
 #endif
