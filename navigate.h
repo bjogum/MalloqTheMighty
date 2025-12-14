@@ -80,6 +80,6 @@ void showMe(Robot *malloq);
 void showMyTrace(Robot *malloq);
 void avoidOverlap(Robot *malloq);
 void keepMyTrackOnRight(Robot *malloq);
-void myRoutePattern(Robot *malloq, enum WorkStyle style);
+void followRoutePattern(Robot *malloq, enum WorkStyle style);
 
 #endif

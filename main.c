@@ -28,7 +28,7 @@ int main(){
     
         if (!initLap){
             avoidOverlap(&malloq);
-            myRoutePattern(&malloq, CIRCLE);
+            followRoutePattern(&malloq, CIRCLE);
         }
     
         keepWallOnRight(&malloq);

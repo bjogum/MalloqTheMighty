@@ -191,7 +191,7 @@ void keepMyTrackOnRight(Robot *malloq){
 }
 
 
-void myRoutePattern(Robot *malloq, enum WorkStyle style){
+void followRoutePattern(Robot *malloq, enum WorkStyle style){
     switch (style)
     {
     case CIRCLE:
