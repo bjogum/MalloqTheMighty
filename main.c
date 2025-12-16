@@ -22,12 +22,12 @@ int main(){
     bool job2do = true;
     while(job2do){
 
-        if (initLap && beenHere(&malloq)){
+        if (initLap && beenHere(&malloq) != -1){ // need "smarter" logic..
             initLap = false;
         }
     
         if (!initLap){
-            avoidOverlap(&malloq);
+            avoidOverlap(&malloq); // if overlap-track turn right ahead, turn right 1 step earlier. if overlap-track turn left ahead, turn left 1 step later.
             followRoutePattern(&malloq, CIRCLE);
         }
     

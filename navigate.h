@@ -70,7 +70,7 @@ void turnMeRight(Robot *malloq);
 void turnMeLeft(Robot *malloq);
 bool isWallInFront(Robot *malloq);
 bool noWallToRight(Robot *malloq);
-bool beenHere(Robot *malloq);
+int beenHere(Robot *malloq);
 void keepWallOnRight(Robot *malloq);
 void rememberThisPos(Robot **malloq);
 void letsWalk(Robot *malloq);

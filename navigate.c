@@ -83,13 +83,13 @@ bool noWallToRight(Robot *malloq){
 }
 
 // if overlap more than 2 steps..
-bool beenHere(Robot *malloq){
+int beenHere(Robot *malloq){
     if (malloq->moves){
         for (int i = 0; i < (*malloq).uniqeMovesCounter; i++){
             if (malloq->pos.X == malloq->historicPos[i].X &&
                 malloq->pos.Y == malloq->historicPos[i].Y){
                     //malloq->overlapCounter++;
-                    return true;
+                    return i;
             }
         }       
     }
@@ -99,7 +99,7 @@ bool beenHere(Robot *malloq){
     //    return true;
         
     //}
-    return false;
+    return -1;
 }
 
 // Håller roboten utmed högerväggen. Moturs.
@@ -179,10 +179,48 @@ void findEdge(Robot *malloq){
     }
 }
 
-
+// if overlap-track turn right ahead, turn right 1 step earlier. if overlap-track turn left ahead, turn left 1 step later.
 void avoidOverlap(Robot *malloq){
-    if (beenHere(malloq)){
-        printf("<<< !overlap! >>>");
+    int overLapIndex = beenHere(malloq);
+
+    if (overLapIndex != -1){
+        
+        printf("<<< !overlap! index%d-y%d:x%d>>>", overLapIndex , malloq->pos.Y, malloq->pos.X);
+
+        // 1. if up->right
+        if ( ((malloq->myCurrentDir == UP) && (malloq->historicPos[overLapIndex+1].X > malloq->pos.X))  ||   
+        ((malloq->myCurrentDir == RIGHT) && (malloq->historicPos[overLapIndex+1].Y > malloq->pos.Y))    ||
+        ((malloq->myCurrentDir == LEFT) && (malloq->historicPos[overLapIndex+1].Y < malloq->pos.Y))) 
+        {
+            // turn right, one step later
+            letsWalk(malloq);
+            turnMeRight(malloq);
+
+
+        // 2. if up->left
+        } else if ( ((malloq->myCurrentDir == UP) && (malloq->historicPos[overLapIndex+1].X < malloq->pos.X))   ||
+        ((malloq->myCurrentDir == RIGHT) && (malloq->historicPos[overLapIndex+1].Y < malloq->pos.Y))            ||
+        ((malloq->myCurrentDir == LEFT) && (malloq->historicPos[overLapIndex+1].Y > malloq->pos.Y)))
+        {
+            // turn left now
+            turnMeLeft(malloq);
+
+
+        // 3. if down->right
+        } else if  (malloq->myCurrentDir == DOWN && (malloq->historicPos[overLapIndex+1].X > malloq->pos.X))
+        {
+            // turn right now
+            turnMeRight(malloq);
+
+
+        // 4. if down->left
+        } else if  (malloq->myCurrentDir == DOWN && (malloq->historicPos[overLapIndex+1].X < malloq->pos.X))
+        {
+            // turn left, one step later
+            letsWalk(malloq);
+            turnMeLeft(malloq);
+
+        }
     }
 }
 
