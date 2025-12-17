@@ -211,7 +211,7 @@ void avoidOverlap(Robot *malloq){
 }
 
 void keepMyTrackOnRight(Robot *malloq){
-    // om mitt tidigare spår (till höger) svänger 1 steg framför -> sväng åt samma håll... utan att överlappa.
+    // kolla om tidigare spår (till höger) svänger till vänster/höger 1 steg framför -> sväng då åt samma håll... utan att överlappa.
     
 }
 
