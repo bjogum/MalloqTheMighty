@@ -31,7 +31,9 @@ int main(){
             followRoutePattern(&malloq, CIRCLE);
         }
     
+        if (initLap)
         keepWallOnRight(&malloq);
+        
         letsWalk(&malloq);
         
         // TODO: battery check..
