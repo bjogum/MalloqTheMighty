@@ -204,15 +204,17 @@ void avoidOverlap(Robot *malloq){
         {
             // turn left now
             turnMeLeft(malloq);
-            printf("## -- LEFT -- ##");
 
         }
     }
 }
 
 void keepMyTrackOnRight(Robot *malloq){
-    // kolla om tidigare spår (till höger) svänger till vänster/höger 1 steg framför -> sväng då åt samma håll... utan att överlappa.
-    
+    // om tidigare spår (till höger) går till vänster, sväng vänster nu. Om tidigare spår (till höger) går till höger sväng höger om 2 steg.
+    // Behövs ej? (1. vilken index har historyPos-spåret till höger om mig nu?)
+    // 2. kolla index+2 för potentiell vänstersväng (alltså rakt fram från mig) - träff? -> sväng vänster
+    // 3. kolla index+1 för potentiell högersväng - träff? -> sväng höger
+    // Behövs ej? (4. kolla så svängen inte har overlap)
 }
 
 
