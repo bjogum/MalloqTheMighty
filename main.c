@@ -22,18 +22,18 @@ int main(){
     bool job2do = true;
     while(job2do){
 
-        if (initLap && beenHere(&malloq) != -1){ // need "smarter" logic..
+        if (initLap && getOverLapIndex(&malloq, -1, -1) != -1){ // need "smarter" logic..
             initLap = false;
         }
     
         if (!initLap){
-            avoidOverlap(&malloq); // if overlap-track turn right ahead, turn right 1 step earlier. if overlap-track turn left ahead, turn left 1 step later.
-            followRoutePattern(&malloq, CIRCLE);
+            fixOverLap(&malloq);
+            followRoutePattern(&malloq, CIRCLE); 
         }
     
         if (initLap)
         keepWallOnRight(&malloq);
-        
+
         letsWalk(&malloq);
         
         // TODO: battery check..

@@ -6,8 +6,8 @@
 #define GRIDSIZE_Y 20
 
 #define ROBOT_SPEED 200000 // Fast=300 000
-#define ROBOT_HOME_X 9
-#define ROBOT_HOME_Y 9
+#define ROBOT_HOME_X 16
+#define ROBOT_HOME_Y 5
 
 #define clrscr() printf("\e[1;1H\e[2J")
 #define COLOR_RESET   "\033[0m"
@@ -70,7 +70,7 @@ void turnMeRight(Robot *malloq);
 void turnMeLeft(Robot *malloq);
 bool isWallInFront(Robot *malloq);
 bool noWallToRight(Robot *malloq);
-int beenHere(Robot *malloq);
+int getOverLapIndex(Robot *malloq, int x, int y);
 void keepWallOnRight(Robot *malloq);
 void rememberThisPos(Robot **malloq);
 void letsWalk(Robot *malloq);
@@ -78,7 +78,7 @@ void findEdge(Robot *malloq);
 void move(int x, int y);
 void showMe(Robot *malloq);
 void showMyTrace(Robot *malloq);
-void avoidOverlap(Robot *malloq);
+void fixOverLap(Robot *malloq);
 void keepMyTrackOnRight(Robot *malloq);
 void followRoutePattern(Robot *malloq, enum WorkStyle style);
 

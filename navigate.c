@@ -81,9 +81,9 @@ bool noWallToRight(Robot *malloq){
     }
     return false;
 }
-
-// if overlap more than 2 steps..
-int beenHere(Robot *malloq){
+/*
+// if overlap; return the index (historicPos) | If NO overlap; return -1.
+int getOverLapIndex(Robot *malloq){
     if (malloq->moves){
         for (int i = 0; i < (*malloq).uniqeMovesCounter; i++){
             if (malloq->pos.X == malloq->historicPos[i].X &&
@@ -94,13 +94,32 @@ int beenHere(Robot *malloq){
         }       
     }
 
-    //if (malloq->overlapCounter > 2){
-    //    malloq->overlapCounter = 0;
-    //    return true;
-        
-    //}
     return -1;
 }
+*/
+
+
+// Input: robot (for actual position) || robot + x , y (for selected position)
+// if overlap; return the index (historicPos) | If NO overlap; return -1.
+int getOverLapIndex(Robot *malloq, int xPos, int yPos){
+    if (xPos == -1 && yPos == -1){
+        xPos = malloq->pos.X;
+        yPos = malloq->pos.Y;
+    }
+
+    if (malloq->moves){
+        for (int i = 0; i < (*malloq).uniqeMovesCounter; i++){
+            if (xPos == malloq->historicPos[i].X &&
+                yPos == malloq->historicPos[i].Y){
+                    return i;
+            }
+        }       
+    }
+
+    return -1;
+}
+
+
 
 // Håller roboten med väggen till höger. Gå moturs.
 void keepWallOnRight(Robot *malloq){
@@ -180,29 +199,27 @@ void findEdge(Robot *malloq){
 }
 
 // if overlap-track turn right ahead, turn right 1 step earlier. if overlap-track turn left ahead, turn left 1 step later.
-void avoidOverlap(Robot *malloq){
-    int overLapIndex = beenHere(malloq);
+void fixOverLap(Robot *malloq){
+    int overLapIndex = getOverLapIndex(malloq, -1, -1);
 
     if (overLapIndex != -1){
         
-        printf("< !overlap! I%d->y%d:x%d>", overLapIndex , malloq->pos.Y, malloq->pos.X);
+        //printf("< !overlap! I%d->y%d:x%d>", overLapIndex , malloq->pos.Y, malloq->pos.X);
 
         // 1. if turn ahead is to -> right
         if ( ((malloq->myCurrentDir == UP) && (malloq->historicPos[overLapIndex+1].X > malloq->pos.X))  ||   
         ((malloq->myCurrentDir == RIGHT) && (malloq->historicPos[overLapIndex+1].Y > malloq->pos.Y))    ||
         ((malloq->myCurrentDir == LEFT) && (malloq->historicPos[overLapIndex+1].Y < malloq->pos.Y))     ||
-        ((malloq->myCurrentDir == DOWN) && (malloq->historicPos[overLapIndex+2].X > malloq->pos.X)) )
+        ((malloq->myCurrentDir == DOWN) && (malloq->historicPos[overLapIndex+1].X < malloq->pos.X)) )
         {
-            // turn right, one step later
             turnMeRight(malloq);
 
         // 2. if turn ahead is to -> left
         } else if ( ((malloq->myCurrentDir == UP) && (malloq->historicPos[overLapIndex+2].X < malloq->pos.X))   ||
         ((malloq->myCurrentDir == RIGHT) && (malloq->historicPos[overLapIndex+2].Y < malloq->pos.Y))            ||
         ((malloq->myCurrentDir == LEFT) && (malloq->historicPos[overLapIndex+2].Y > malloq->pos.Y))             ||
-        ((malloq->myCurrentDir == DOWN) && (malloq->historicPos[overLapIndex+1].X < malloq->pos.X)) )
+        ((malloq->myCurrentDir == DOWN) && (malloq->historicPos[overLapIndex+2].X > malloq->pos.X)) )
         {
-            // turn left now
             turnMeLeft(malloq);
 
         }
@@ -213,6 +230,9 @@ void keepMyTrackOnRight(Robot *malloq){
     // om tidigare spår (till höger) går till vänster, sväng vänster nu. Om tidigare spår (till höger) går till höger sväng höger om 2 steg.
     // Behövs ej? (1. vilken index har historyPos-spåret till höger om mig nu?)
     // 2. kolla index+2 för potentiell vänstersväng (alltså rakt fram från mig) - träff? -> sväng vänster
+    
+
+
     // 3. kolla index+1 för potentiell högersväng - träff? -> sväng höger
     // Behövs ej? (4. kolla så svängen inte har overlap)
 }
