@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "navigate.h"
+#include "log.h"
 
 // flyttar makören till vald position
 void move(int x, int y){
@@ -212,6 +213,12 @@ void fixOverLap(Robot *malloq){
         ((malloq->myCurrentDir == LEFT) && (malloq->historicPos[overLapIndex+1].Y < malloq->pos.Y))     ||
         ((malloq->myCurrentDir == DOWN) && (malloq->historicPos[overLapIndex+1].X < malloq->pos.X)) )
         {
+            
+            // for debug
+            char debug[100];
+            snprintf(debug, sizeof(debug), "Right(OverLapFx) -> PosX [%d] | PosY [%d] | HistPosX+1 [%d] | HistPosY+1 [%d]", malloq->pos.X, malloq->pos.Y, malloq->historicPos[overLapIndex+1].X, malloq->historicPos[overLapIndex+1].Y);
+            saveStr(debug);
+
             turnMeRight(malloq);
 
         // 2. if turn ahead is to -> left
@@ -220,6 +227,11 @@ void fixOverLap(Robot *malloq){
         ((malloq->myCurrentDir == LEFT) && (malloq->historicPos[overLapIndex+2].Y > malloq->pos.Y))             ||
         ((malloq->myCurrentDir == DOWN) && (malloq->historicPos[overLapIndex+2].X > malloq->pos.X)) )
         {
+            // for debug
+            char debug[100];
+            snprintf(debug, sizeof(debug), "Left(OverLapFx) -> PosX [%d] | PosY [%d] | HistPosX+2 [%d] | HistPosY+2 [%d]", malloq->pos.X, malloq->pos.Y, malloq->historicPos[overLapIndex+2].X, malloq->historicPos[overLapIndex+2].Y);
+            saveStr(debug);
+            
             turnMeLeft(malloq);
 
         }

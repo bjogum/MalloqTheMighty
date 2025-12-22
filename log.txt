@@ -1,0 +1,7 @@
+Left(OverLapFx) -> PosX [39] | PosY [3] | HistPosX+2 [38] | HistPosY+2 [2]
+Left(OverLapFx) -> PosX [2] | PosY [3] | HistPosX+2 [2] | HistPosY+2 [5]
+Left(OverLapFx) -> PosX [2] | PosY [18] | HistPosX+2 [3] | HistPosY+2 [19]
+Left(OverLapFx) -> PosX [39] | PosY [18] | HistPosX+2 [39] | HistPosY+2 [16]
+Left(OverLapFx) -> PosX [39] | PosY [7] | HistPosX+2 [38] | HistPosY+2 [3]
+Left(OverLapFx) -> PosX [2] | PosY [7] | HistPosX+2 [2] | HistPosY+2 [9]
+Left(OverLapFx) -> PosX [2] | PosY [18] | HistPosX+2 [3] | HistPosY+2 [19]
