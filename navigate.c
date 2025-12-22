@@ -216,7 +216,7 @@ void fixOverLap(Robot *malloq){
             
             // for debug
             char debug[100];
-            snprintf(debug, sizeof(debug), "Right(OverLapFx) -> PosX [%d] | PosY [%d] | HistPosX+1 [%d] | HistPosY+1 [%d]", malloq->pos.X, malloq->pos.Y, malloq->historicPos[overLapIndex+1].X, malloq->historicPos[overLapIndex+1].Y);
+            snprintf(debug, sizeof(debug), "Right(OverLapFx) -> PosX [%d] | PosY [%d] | HistPosX+1 [%d] | HistPosY+1 [%d] | OverLapInx [%d]", malloq->pos.X, malloq->pos.Y, malloq->historicPos[overLapIndex+1].X, malloq->historicPos[overLapIndex+1].Y, overLapIndex);
             saveStr(debug);
 
             turnMeRight(malloq);
@@ -229,7 +229,7 @@ void fixOverLap(Robot *malloq){
         {
             // for debug
             char debug[100];
-            snprintf(debug, sizeof(debug), "Left(OverLapFx) -> PosX [%d] | PosY [%d] | HistPosX+2 [%d] | HistPosY+2 [%d]", malloq->pos.X, malloq->pos.Y, malloq->historicPos[overLapIndex+2].X, malloq->historicPos[overLapIndex+2].Y);
+            snprintf(debug, sizeof(debug), "Left(OverLapFx) -> PosX [%d] | PosY [%d] | HistPosX+2 [%d] | HistPosY+2 [%d] | OverLapInx [%d]", malloq->pos.X, malloq->pos.Y, malloq->historicPos[overLapIndex+2].X, malloq->historicPos[overLapIndex+2].Y, overLapIndex);
             saveStr(debug);
             
             turnMeLeft(malloq);
