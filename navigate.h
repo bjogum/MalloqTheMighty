@@ -60,7 +60,7 @@ typedef struct
     Pos myHome;
     Pos pos;
     Pos *historicPos;
-    int uniqeMovesCounter;
+    int uniqueMovesCounter;
     int overlapCounter;
     bool finish;
 }Robot;

@@ -22,19 +22,17 @@ int main(){
     bool job2do = true;
     while(job2do){
 
-        if (initLap && getOverLapIndex(&malloq, -1, -1) != -1){ // need "smarter" logic..
+        if (initLap && getOverLapIndex(&malloq, -1, -1) != -1){ // ..need "smarter" logic..
             initLap = false;
         }
     
         if (!initLap){
-            fixOverLap(&malloq); // not finish yet.. 
-            followRoutePattern(&malloq, CIRCLE); 
+            fixOverLap(&malloq);    // ..not finish yet.. 
+            followRoutePattern(&malloq, CIRCLE);
         }
-    
-        if (initLap)
-        keepWallOnRight(&malloq);
 
-        letsWalk(&malloq);
+        keepWallOnRight(&malloq);   // stay in grid
+        letsWalk(&malloq);          // move malloq
         
         // TODO: battery check..
         if (!jobLeftPerc(&malloq)){

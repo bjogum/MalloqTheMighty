@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 #include "navigate.h"
 #include "log.h"
 
@@ -49,12 +50,15 @@ void turnMeLeft(Robot *malloq){
     case UP:
         malloq->myCurrentDir = LEFT;
         break;
+
     case DOWN:
         malloq->myCurrentDir = RIGHT;
         break;
+
     case LEFT:
         malloq->myCurrentDir = DOWN;
         break;
+
     case RIGHT:
         malloq->myCurrentDir = UP;
         break;
@@ -86,7 +90,7 @@ bool noWallToRight(Robot *malloq){
 // if overlap; return the index (historicPos) | If NO overlap; return -1.
 int getOverLapIndex(Robot *malloq){
     if (malloq->moves){
-        for (int i = 0; i < (*malloq).uniqeMovesCounter; i++){
+        for (int i = 0; i < (*malloq).uniqueMovesCounter; i++){
             if (malloq->pos.X == malloq->historicPos[i].X &&
                 malloq->pos.Y == malloq->historicPos[i].Y){
                     //malloq->overlapCounter++;
@@ -102,14 +106,14 @@ int getOverLapIndex(Robot *malloq){
 
 // Input: robot (for actual position) || robot + x , y (for selected position)
 // if overlap; return the index (historicPos) | If NO overlap; return -1.
-int getOverLapIndex(Robot *malloq, int xPos, int yPos){
+int getOverLapIndex(Robot *malloq, int xPos, int yPos){ // BUG: GER INDEX TROTS OVERLAP...
     if (xPos == -1 && yPos == -1){
         xPos = malloq->pos.X;
         yPos = malloq->pos.Y;
     }
 
     if (malloq->moves){
-        for (int i = 0; i < (*malloq).uniqeMovesCounter; i++){
+        for (int i = 0; i < (*malloq).uniqueMovesCounter; i++){
             if (xPos == malloq->historicPos[i].X &&
                 yPos == malloq->historicPos[i].Y){
                     return i;
@@ -125,43 +129,50 @@ int getOverLapIndex(Robot *malloq, int xPos, int yPos){
 // Håller roboten med väggen till höger. Gå moturs.
 void keepWallOnRight(Robot *malloq){
     while (isWallInFront(malloq)){ 
+
+        // for debug
+        char debug[100];
+        snprintf(debug, sizeof(debug), "Left(keepWallOnRight)");
+        saveStr(debug);
+
         turnMeLeft(malloq); 
     } 
-    if (noWallToRight(malloq)){ 
-        turnMeRight(malloq); 
-    }
+    //if (noWallToRight(malloq)){ 
+    //    turnMeRight(malloq); 
+    //}
 }
 
-void rememberThisPos(Robot **malloq){  
-    bool newUniqePos = true;
 
-    // Add ONLY uniqe data
+void rememberThisPos(Robot **malloq){  
+    bool newuniquePos = true;
+
+    // Add ONLY unique positions
     if ((*malloq)->moves){
-        for (int i = 0; i < (*malloq)->uniqeMovesCounter; i++){
+        for (int i = 0; i < (*malloq)->uniqueMovesCounter; i++){
             if ((*malloq)->pos.X == (*malloq)->historicPos[i].X &&
                 (*malloq)->pos.Y == (*malloq)->historicPos[i].Y){
-                newUniqePos = false;
+                newuniquePos = false;
                 break;
             }
         }
     }
 
-    if (newUniqePos){
+    if (newuniquePos){
         // Allocate memory for the position-data
         if (!(*malloq)->moves){
             (*malloq)->historicPos = (Pos*)malloc(sizeof(Pos) * 1);
         } else {
-            (*malloq)->historicPos = (Pos*)realloc((*malloq)->historicPos, sizeof(Pos) * (*malloq)->uniqeMovesCounter+1);
+            (*malloq)->historicPos = (Pos*)realloc((*malloq)->historicPos, sizeof(Pos) * (*malloq)->uniqueMovesCounter+1);
         }
         if ((*malloq)->historicPos == NULL){
             printf("Error during memory allocation");
             return;
         }
 
-        // add the new position, at the new index. Add +1 to uniqeMovesCounter.
-        (*malloq)->historicPos[(*malloq)->uniqeMovesCounter].X = (*malloq)->pos.X;
-        (*malloq)->historicPos[(*malloq)->uniqeMovesCounter].Y = (*malloq)->pos.Y;
-        (*malloq)->uniqeMovesCounter++;
+        // add the new position, at the new index. Add +1 to uniqueMovesCounter.
+        (*malloq)->historicPos[(*malloq)->uniqueMovesCounter].X = (*malloq)->pos.X;
+        (*malloq)->historicPos[(*malloq)->uniqueMovesCounter].Y = (*malloq)->pos.Y;
+        (*malloq)->uniqueMovesCounter++;
     }
 }
 
@@ -199,13 +210,11 @@ void findEdge(Robot *malloq){
     }
 }
 
-// if overlap-track turn right ahead, turn right 1 step earlier. if overlap-track turn left ahead, turn left 1 step later.
+// if overlap-track turn left ahead, turn right 1 step earlier. if overlap-track turn right ahead, turn left 1 step later.
 void fixOverLap(Robot *malloq){
     int overLapIndex = getOverLapIndex(malloq, -1, -1);
 
     if (overLapIndex != -1){
-        
-        //printf("< !overlap! I%d->y%d:x%d>", overLapIndex , malloq->pos.Y, malloq->pos.X);
 
         // 1. if turn ahead is to -> right
         if ( ((malloq->myCurrentDir == UP) && (malloq->historicPos[overLapIndex+1].X > malloq->pos.X))  ||   
@@ -233,8 +242,15 @@ void fixOverLap(Robot *malloq){
             saveStr(debug);
             
             turnMeLeft(malloq);
-
+        
         }
+
+        // move historicPos-memory, one step to left (from overlaped index).
+        memmove(malloq->historicPos + overLapIndex, malloq->historicPos + overLapIndex + 1, (malloq->uniqueMovesCounter - (overLapIndex + 1)) * sizeof(Pos));
+        
+        // add current (overlaped) pos to historicPos.
+        malloq->historicPos[malloq->uniqueMovesCounter-1].X = malloq->pos.X;
+        malloq->historicPos[malloq->uniqueMovesCounter-1].Y = malloq->pos.Y;
     }
 }
 
