@@ -86,27 +86,11 @@ bool noWallToRight(Robot *malloq){
     }
     return false;
 }
-/*
-// if overlap; return the index (historicPos) | If NO overlap; return -1.
-int getOverLapIndex(Robot *malloq){
-    if (malloq->moves){
-        for (int i = 0; i < (*malloq).uniqueMovesCounter; i++){
-            if (malloq->pos.X == malloq->historicPos[i].X &&
-                malloq->pos.Y == malloq->historicPos[i].Y){
-                    //malloq->overlapCounter++;
-                    return i;
-            }
-        }       
-    }
-
-    return -1;
-}
-*/
 
 
 // Input: robot (for actual position) || robot + x , y (for selected position)
 // if overlap; return the index (historicPos) | If NO overlap; return -1.
-int getOverLapIndex(Robot *malloq, int xPos, int yPos){ // BUG: GER INDEX TROTS OVERLAP...
+int getOverLapIndex(Robot *malloq, int xPos, int yPos){ 
     if (xPos == -1 && yPos == -1){
         xPos = malloq->pos.X;
         yPos = malloq->pos.Y;
@@ -258,14 +242,63 @@ void fixOverLap(Robot *malloq){
 }
 
 void keepMyTrackOnRight(Robot *malloq){
-    // om tidigare spår (till höger) går till vänster, sväng vänster nu. Om tidigare spår (till höger) går till höger sväng höger om 2 steg.
+    // om tidigare spår+1 (till höger) går till vänster, sväng vänster. Om tidigare spår+2 (till höger) går till höger sväng höger.
     // Behövs ej? (1. vilken index har historyPos-spåret till höger om mig nu?)
     // 2. kolla index+2 för potentiell vänstersväng (alltså rakt fram från mig) - träff? -> sväng vänster
     
+    
+    int right_xPos, right_yPos, left_xPos, left_yPos;
 
+    switch (malloq->myCurrentDir)
+    {
+    case UP:
+        // to check for right turn
+        right_xPos = malloq->pos.X+1;
+        right_yPos = malloq->pos.Y;
 
-    // 3. kolla index+1 för potentiell högersväng - träff? -> sväng höger
-    // Behövs ej? (4. kolla så svängen inte har overlap)
+        // to check for left turn
+        left_xPos = malloq->pos.X;
+        left_yPos = malloq->pos.Y-1;  
+        break;
+
+    case DOWN:
+        // to check for right turn
+        right_xPos = malloq->pos.X-1;
+        right_yPos = malloq->pos.Y;
+
+        // to check for left turn
+        left_xPos = malloq->pos.X;
+        left_yPos = malloq->pos.Y+1;  
+        break;
+
+    case LEFT:
+        // to check for right turn
+        right_xPos = malloq->pos.X;
+        right_yPos = malloq->pos.Y-1;
+
+        // to check for left turn
+        left_xPos = malloq->pos.X-1;
+        left_yPos = malloq->pos.Y;  
+        break;
+
+    case RIGHT:
+        // to check for right turn
+        right_xPos = malloq->pos.X;
+        right_yPos = malloq->pos.Y+1;
+
+        // to check for left turn
+        left_xPos = malloq->pos.X+1;
+        left_yPos = malloq->pos.Y;  
+        break;
+    }
+
+    // kolla om "ny pos" finns till höger: Om -> gå åt höger.
+    if (getOverLapIndex(malloq, right_xPos, right_yPos) == -1){
+        turnMeRight(malloq);
+
+    // kolla om "kännd pos" finns till rakt fram: Om -> gå åt vänster.
+    } else if (getOverLapIndex(malloq, left_xPos, left_yPos) != -1)
+        turnMeLeft(malloq);
 }
 
 

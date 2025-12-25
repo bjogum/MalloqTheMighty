@@ -27,7 +27,7 @@ int main(){
         }
     
         if (!initLap){
-            fixOverLap(&malloq);    // ..not finish yet.. 
+            fixOverLap(&malloq);
             followRoutePattern(&malloq, CIRCLE);
         }
 
