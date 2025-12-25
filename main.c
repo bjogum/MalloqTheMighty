@@ -3,11 +3,19 @@
 #include <math.h>
 #include "navigate.h"
 #include "init.h"
+#include "log.h"
 
 
 int jobLeftPerc(Robot *malloq){
     int gridPoints = (GRIDSIZE_X-2) * (GRIDSIZE_Y-2);
-    return ceil((gridPoints - malloq->moves / gridPoints) * 100);
+
+    // for debug
+    char debug[100];
+    snprintf(debug, sizeof(debug), "[JOBLEFT: %f]", ceil(((gridPoints - malloq->moves) * 100) / gridPoints));
+    saveStr(debug);
+
+    return ceil(((gridPoints - malloq->moves) * 100) / gridPoints);
+
 }
 
 int main(){
@@ -36,12 +44,11 @@ int main(){
         
         // TODO: battery check..
         if (!jobLeftPerc(&malloq)){
-            job2do = false;
+            // job2do = false;
         }
     }
 
     // park malloq..
-    printf("time to go home and sleep..zzz");
         
 return 0;
 }

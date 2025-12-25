@@ -242,11 +242,7 @@ void fixOverLap(Robot *malloq){
 }
 
 void keepMyTrackOnRight(Robot *malloq){
-    // om tidigare spår+1 (till höger) går till vänster, sväng vänster. Om tidigare spår+2 (till höger) går till höger sväng höger.
-    // Behövs ej? (1. vilken index har historyPos-spåret till höger om mig nu?)
-    // 2. kolla index+2 för potentiell vänstersväng (alltså rakt fram från mig) - träff? -> sväng vänster
-    
-    
+
     int right_xPos, right_yPos, left_xPos, left_yPos;
 
     switch (malloq->myCurrentDir)
