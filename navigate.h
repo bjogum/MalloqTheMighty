@@ -73,7 +73,7 @@ bool noWallToRight(Robot *malloq);
 int getOverLapIndex(Robot *malloq, int x, int y);
 void keepWallOnRight(Robot *malloq);
 void rememberThisPos(Robot **malloq);
-void letsWalk(Robot *malloq);
+void letsWalk(Robot *malloq, bool atTrack);
 void findEdge(Robot *malloq);
 void move(int x, int y);
 void showMe(Robot *malloq);

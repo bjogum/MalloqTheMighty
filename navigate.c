@@ -177,14 +177,17 @@ void rememberThisPos(Robot **malloq){
 }
 
 // move robot to new pos
-void letsWalk(Robot *malloq){
+void letsWalk(Robot *malloq, bool atTrack){
 
-    rememberThisPos(&malloq);
+    if (atTrack){
+        rememberThisPos(&malloq);
+
+        // count robot total moves
+        malloq->moves++;
+    }
+    
     showMe(malloq);
     showMyTrace(malloq);
-
-    // count robot total moves
-    malloq->moves++;
 
     switch (malloq->myCurrentDir) {
     case UP:
@@ -206,7 +209,7 @@ void letsWalk(Robot *malloq){
 void findEdge(Robot *malloq){
     while (NO_WALL_RIGHT){
         malloq->myCurrentDir = RIGHT;
-        letsWalk(malloq);
+        letsWalk(malloq, false);
     }
 }
 

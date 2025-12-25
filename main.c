@@ -32,7 +32,7 @@ int main(){
         }
 
         keepWallOnRight(&malloq);   // stay in grid
-        letsWalk(&malloq);          // move malloq
+        letsWalk(&malloq, true);    // move malloq
         
         // TODO: battery check..
         if (!jobLeftPerc(&malloq)){
