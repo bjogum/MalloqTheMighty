@@ -7,15 +7,8 @@
 
 
 int jobLeftPerc(Robot *malloq){
-    int gridPoints = (GRIDSIZE_X-2) * (GRIDSIZE_Y-2);
-
-    // for debug
-    char debug[100];
-    snprintf(debug, sizeof(debug), "[JOBLEFT: %f]", ceil(((gridPoints - malloq->moves) * 100) / gridPoints));
-    saveStr(debug);
-
-    return ceil(((gridPoints - malloq->moves) * 100) / gridPoints);
-
+    int gridSteps = (GRIDSIZE_X-2) * (GRIDSIZE_Y-2); // 684
+    return ceil(((gridSteps - malloq->uniqueMovesCounter) * 1000) / gridSteps);
 }
 
 int main(){
@@ -40,15 +33,18 @@ int main(){
         }
 
         keepWallOnRight(&malloq);   // stay in grid
-        letsWalk(&malloq, true);    // move malloq
         
         // TODO: battery check..
-        if (!jobLeftPerc(&malloq)){
-            // job2do = false;
-        }
-    }
 
-    // park malloq..
+        if (jobLeftPerc(&malloq)){
+            letsWalk(&malloq, true);    // move malloq
+        } else {
+            // park malloq..
+            // job2do = false;
+            }
+            
+        
+    }
         
 return 0;
 }
